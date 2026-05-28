@@ -1,5 +1,5 @@
 // ===== CONFIGURAÇÃO =====
-const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
+const SPREADSHEET_ID = '1ikma_OmmPKwaHN2b1JlSeIHEmzMgLwzZq39WwyyRiGk';
 const DECAY_FACTOR = 0.8;
 
 const TEAM_ALGORITHM_WEIGHTS = {
