@@ -39,22 +39,29 @@ const setupNavbarToggle = () => {
     const toggle = document.getElementById('navbar-toggle');
     const menu = document.getElementById('navbar-menu');
 
-    toggle?.addEventListener('click', () => {
-        menu?.classList.toggle('hidden');
+    if (!toggle || !menu) {
+        console.log('Menu hambúrguer: elementos não encontrados');
+        return;
+    }
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+        console.log('Menu toggled:', menu.classList.contains('hidden') ? 'hidden' : 'visible');
     });
 
     // Fechar menu ao clicar em um botão
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            menu?.classList.add('hidden');
+            menu.classList.add('hidden');
         });
     });
 
-    // Fechar menu ao mudar de tela
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.addEventListener('click', () => {
-            menu?.classList.add('hidden');
-        });
+    // Fechar menu ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navbar')) {
+            menu.classList.add('hidden');
+        }
     });
 };
 
