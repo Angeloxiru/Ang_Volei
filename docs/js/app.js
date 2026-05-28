@@ -36,23 +36,43 @@ const showLoading = (show = true) => {
 
 // Setup menu hambúrguer
 const setupNavbarToggle = () => {
+    console.log('=== setupNavbarToggle iniciado ===');
+
     const toggle = document.getElementById('navbar-toggle');
     const menu = document.getElementById('navbar-menu');
 
+    console.log('Toggle element:', toggle);
+    console.log('Menu element:', menu);
+
     if (!toggle || !menu) {
-        console.log('Menu hambúrguer: elementos não encontrados');
+        console.error('❌ Menu hambúrguer: elementos não encontrados!');
+        console.error('  - Toggle existe?', !!toggle);
+        console.error('  - Menu existe?', !!menu);
         return;
     }
 
+    console.log('✅ Elementos encontrados, registrando eventos...');
+
     toggle.addEventListener('click', (e) => {
+        console.log('🔹 Botão clicado!');
+        e.preventDefault();
         e.stopPropagation();
+
+        const isHidden = menu.classList.contains('hidden');
+        console.log('  - Menu estava:', isHidden ? 'escondido' : 'visível');
+
         menu.classList.toggle('hidden');
-        console.log('Menu toggled:', menu.classList.contains('hidden') ? 'hidden' : 'visible');
+
+        const isHiddenNow = menu.classList.contains('hidden');
+        console.log('  - Menu agora está:', isHiddenNow ? 'escondido' : 'visível');
     });
+
+    console.log('✅ Listener do toggle registrado');
 
     // Fechar menu ao clicar em um botão
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            console.log('Nav btn clicado, fechando menu');
             menu.classList.add('hidden');
         });
     });
@@ -60,9 +80,15 @@ const setupNavbarToggle = () => {
     // Fechar menu ao clicar fora
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.navbar')) {
+            const wasHidden = menu.classList.contains('hidden');
             menu.classList.add('hidden');
+            if (!wasHidden) {
+                console.log('Menu fechado (clique fora)');
+            }
         }
     });
+
+    console.log('=== setupNavbarToggle finalizado ===');
 };
 
 // App initialization
