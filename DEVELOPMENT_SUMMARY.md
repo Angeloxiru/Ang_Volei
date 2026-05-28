@@ -1,4 +1,4 @@
-# 📋 Sumário de Desenvolvimento - Vôlei Teams
+# 📋 Sumário de Desenvolvimento - Vôlei de Quinta
 
 ## 🎯 Projeto Concluído: PWA de Gestão e Balanceamento de Times de Vôlei
 

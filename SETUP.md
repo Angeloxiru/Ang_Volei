@@ -1,4 +1,4 @@
-# Guia de Setup Completo - Vôlei Teams
+# Guia de Setup Completo - Vôlei de Quinta
 
 Siga este guia passo a passo para colocar o Vôlei Teams em produção.
 

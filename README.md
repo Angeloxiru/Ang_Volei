@@ -1,4 +1,4 @@
-# Vôlei Teams - PWA de Gestão e Balanceamento de Times
+# Vôlei de Quinta - PWA de Gestão e Balanceamento de Times
 
 Aplicação web progressiva (PWA) para gestão de times de vôlei com balanceamento automático baseado em scores de habilidade.
 

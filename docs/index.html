@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#2c3e50">
     <meta name="description" content="App PWA de Gestão e Balanceamento de Times de Vôlei">
 
-    <title>Vôlei Teams - Gestão de Times</title>
+    <title>Vôlei de Quinta - Gestão de Times</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232c3e50' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🏐</text></svg>">
@@ -17,7 +17,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-content">
-            <div class="navbar-title">🏐 Vôlei Teams</div>
+            <div class="navbar-title">🏐 Vôlei de Quinta</div>
             <div class="navbar-menu" id="navbar-menu">
                 <button class="nav-btn" id="nav-home" style="display: none;">Home</button>
                 <button class="nav-btn" id="nav-jogadores" style="display: none;">Jogadores</button>
@@ -33,12 +33,12 @@
         <!-- Tela de Login -->
         <section id="login-section" class="screen active">
             <div class="auth-card">
-                <h1>Vôlei Teams</h1>
+                <h1>Vôlei de Quinta</h1>
                 <p class="subtitle">Gestão e Balanceamento de Times</p>
 
                 <form id="login-form" class="auth-form">
                     <input type="text" id="login-username" placeholder="Login" required autocomplete="username">
-                    <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password">
+                    <input type="number" id="login-password" placeholder="Senha (números)" required autocomplete="current-password">
                     <button type="submit" class="btn btn-primary">Entrar</button>
                 </form>
 
@@ -56,8 +56,8 @@
                 <form id="register-form" class="auth-form">
                     <input type="text" id="register-name" placeholder="Nome completo" required>
                     <input type="text" id="register-username" placeholder="Login (único)" required>
-                    <input type="password" id="register-password" placeholder="Senha" required>
-                    <input type="password" id="register-password-confirm" placeholder="Confirmar senha" required>
+                    <input type="number" id="register-password" placeholder="Senha (números)" required min="1000" max="999999">
+                    <input type="number" id="register-password-confirm" placeholder="Confirmar senha" required min="1000" max="999999">
 
                     <div class="form-row">
                         <select id="register-sexo" required>

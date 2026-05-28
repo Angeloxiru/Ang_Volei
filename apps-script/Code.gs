@@ -148,13 +148,19 @@ function registrar(data) {
     }
   }
 
+  // Validate password is numeric
+  const senha = parseInt(data.senha);
+  if (isNaN(senha) || senha < 1000 || senha > 999999) {
+    throw new Error('Senha deve ser um número entre 1000 e 999999');
+  }
+
   const id = generateId();
 
   jogadores.appendRow([
     id,
     data.nome,
     data.login,
-    data.senha,
+    senha,
     'JOGADOR',
     data.sexo,
     data.altura_cm,
@@ -175,8 +181,13 @@ function login(login, senha) {
   const jogadores = getSheet('Jogadores');
   const rows = jogadores.getDataRange().getValues();
 
+  const senhaNum = parseInt(senha);
+  if (isNaN(senhaNum)) {
+    throw new Error('Senha deve ser numérica');
+  }
+
   for (let i = 1; i < rows.length; i++) {
-    if (rows[i][2] === login && rows[i][3] === senha && rows[i][9]) { // Check ativo
+    if (rows[i][2] === login && rows[i][3] === senhaNum && rows[i][9]) { // Check ativo
       const usuario = {
         id: rows[i][0],
         nome: rows[i][1],

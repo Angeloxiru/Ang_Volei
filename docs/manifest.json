@@ -1,6 +1,6 @@
 {
-  "name": "Vôlei Teams - Gestão de Times",
-  "short_name": "Vôlei Teams",
+  "name": "Vôlei de Quinta - Gestão de Times",
+  "short_name": "Vôlei de Quinta",
   "description": "App PWA para gestão e balanceamento de times de vôlei",
   "start_url": "index.html",
   "scope": "./",
