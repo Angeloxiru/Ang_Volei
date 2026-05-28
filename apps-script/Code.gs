@@ -101,7 +101,7 @@ function initializeSheets() {
   // Initialize Jogadores sheet
   const jogadores = ss.getSheetByName('Jogadores');
   if (jogadores.getLastRow() < 2) {
-    jogadores.appendRow(['id', 'nome', 'login', 'senha_hash', 'papel', 'sexo', 'altura_cm', 'idade', 'peso_kg', 'ativo', 'data_cadastro']);
+    jogadores.appendRow(['id', 'nome', 'login', 'senha', 'papel', 'sexo', 'altura_cm', 'idade', 'peso_kg', 'ativo', 'data_cadastro']);
   }
 
   // Initialize Scores sheet
@@ -136,10 +136,6 @@ function generateId() {
   return Utilities.getUuid();
 }
 
-function hashPassword(password) {
-  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, password);
-}
-
 // ===== AUTENTICAÇÃO =====
 function registrar(data) {
   const jogadores = getSheet('Jogadores');
@@ -153,13 +149,12 @@ function registrar(data) {
   }
 
   const id = generateId();
-  const senhaHash = Utilities.base64Encode(hashPassword(data.senha));
 
   jogadores.appendRow([
     id,
     data.nome,
     data.login,
-    senhaHash,
+    data.senha,
     'JOGADOR',
     data.sexo,
     data.altura_cm,
@@ -179,10 +174,9 @@ function registrar(data) {
 function login(login, senha) {
   const jogadores = getSheet('Jogadores');
   const rows = jogadores.getDataRange().getValues();
-  const senhaHash = Utilities.base64Encode(hashPassword(senha));
 
   for (let i = 1; i < rows.length; i++) {
-    if (rows[i][2] === login && rows[i][3] === senhaHash && rows[i][9]) { // Check ativo
+    if (rows[i][2] === login && rows[i][3] === senha && rows[i][9]) { // Check ativo
       const usuario = {
         id: rows[i][0],
         nome: rows[i][1],
