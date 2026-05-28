@@ -309,6 +309,39 @@ body {
     padding: 1rem;
     text-align: center;
     border-left: 4px solid var(--accent);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.jogador-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.jogador-card.expanded {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.jogador-card.expanded .jogador-info-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.jogador-card.expanded .jogador-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jogador-card.expanded canvas {
+    max-width: 300px;
+    max-height: 300px;
 }
 
 .jogador-card h4 {
@@ -322,6 +355,11 @@ body {
     font-size: 0.9rem;
     margin-top: 0.5rem;
     flex-wrap: wrap;
+}
+
+.jogador-card.expanded .score {
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .score-item {

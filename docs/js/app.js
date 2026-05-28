@@ -110,6 +110,8 @@ const carregarJogadores = async () => {
     }
 };
 
+let chartsAtivos = {};
+
 const exibirJogadores = (lista) => {
     const container = document.getElementById('jogadores-list');
     container.innerHTML = '';
@@ -122,6 +124,7 @@ const exibirJogadores = (lista) => {
     lista.forEach(jogador => {
         const card = document.createElement('div');
         card.className = 'jogador-card';
+        card.dataset.jogadorId = jogador.id;
         card.innerHTML = `
             <h4>${jogador.nome}</h4>
             <div class="jogador-info">
@@ -156,7 +159,185 @@ const exibirJogadores = (lista) => {
                 </div>
             </div>
         `;
+
+        card.addEventListener('click', () => {
+            expandirJogador(card, jogador, container);
+        });
+
         container.appendChild(card);
+    });
+};
+
+const expandirJogador = (card, jogador, container) => {
+    // Se já está expandido, contrair
+    if (card.classList.contains('expanded')) {
+        if (chartsAtivos[jogador.id]) {
+            chartsAtivos[jogador.id].destroy();
+            delete chartsAtivos[jogador.id];
+        }
+        card.classList.remove('expanded');
+        card.innerHTML = `
+            <h4>${jogador.nome}</h4>
+            <div class="jogador-info">
+                ${jogador.sexo === 'F' ? '👩' : '👨'} ${jogador.altura_cm}cm · ${jogador.idade} anos
+            </div>
+            <div class="score">
+                <div class="score-item">
+                    <div class="score-label">Geral</div>
+                    <div class="score-value">${(jogador.score_geral || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Saque</div>
+                    <div class="score-value">${(jogador.saque || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Ataque</div>
+                    <div class="score-value">${(jogador.ataque || 0).toFixed(1)}</div>
+                </div>
+            </div>
+            <div class="score">
+                <div class="score-item">
+                    <div class="score-label">Bloqueio</div>
+                    <div class="score-value">${(jogador.bloqueio || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Defesa</div>
+                    <div class="score-value">${(jogador.defesa || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Recepção</div>
+                    <div class="score-value">${(jogador.recepcao || 0).toFixed(1)}</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    // Contrair outros cards expandidos
+    document.querySelectorAll('.jogador-card.expanded').forEach(c => {
+        if (c !== card) {
+            c.classList.remove('expanded');
+            const id = c.dataset.jogadorId;
+            if (chartsAtivos[id]) {
+                chartsAtivos[id].destroy();
+                delete chartsAtivos[id];
+            }
+        }
+    });
+
+    // Expandir este card
+    card.classList.add('expanded');
+    card.innerHTML = `
+        <div class="jogador-info-left">
+            <h4>${jogador.nome}</h4>
+            <div class="jogador-info">
+                ${jogador.sexo === 'F' ? '👩' : '👨'} ${jogador.altura_cm}cm · ${jogador.idade} anos
+            </div>
+            <div class="score">
+                <div class="score-item">
+                    <div class="score-label">Score Geral</div>
+                    <div class="score-value">${(jogador.score_geral || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Saque</div>
+                    <div class="score-value">${(jogador.saque || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Ataque</div>
+                    <div class="score-value">${(jogador.ataque || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Bloqueio</div>
+                    <div class="score-value">${(jogador.bloqueio || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Defesa</div>
+                    <div class="score-value">${(jogador.defesa || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Levantamento</div>
+                    <div class="score-value">${(jogador.levantamento || 0).toFixed(1)}</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Recepção</div>
+                    <div class="score-value">${(jogador.recepcao || 0).toFixed(1)}</div>
+                </div>
+            </div>
+        </div>
+        <div class="jogador-chart">
+            <canvas id="chart-${jogador.id}"></canvas>
+        </div>
+    `;
+
+    // Criar gráfico de radar
+    setTimeout(() => {
+        criarGraficoRadar(jogador);
+    }, 100);
+};
+
+const criarGraficoRadar = (jogador) => {
+    const ctx = document.getElementById(`chart-${jogador.id}`);
+    if (!ctx) return;
+
+    if (chartsAtivos[jogador.id]) {
+        chartsAtivos[jogador.id].destroy();
+    }
+
+    chartsAtivos[jogador.id] = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Saque', 'Ataque', 'Bloqueio', 'Defesa', 'Levantamento', 'Recepção'],
+            datasets: [{
+                label: jogador.nome,
+                data: [
+                    jogador.saque || 0,
+                    jogador.ataque || 0,
+                    jogador.bloqueio || 0,
+                    jogador.defesa || 0,
+                    jogador.levantamento || 0,
+                    jogador.recepcao || 0
+                ],
+                borderColor: '#e74c3c',
+                backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                borderWidth: 2,
+                fill: true,
+                pointBackgroundColor: '#e74c3c',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#34495e',
+                        font: { size: 12 }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#7f8c8d',
+                        stepSize: 20
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    pointLabels: {
+                        color: '#34495e',
+                        font: { size: 12 }
+                    }
+                }
+            }
+        }
     });
 };
 
