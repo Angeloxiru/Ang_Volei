@@ -628,3 +628,17 @@ function listarHistorico() {
 
   return Object.values(montagens);
 }
+
+// ===== DEBUG =====
+function debugJogadores() {
+  const jogadores = getSheet('Jogadores');
+  const rows = jogadores.getDataRange().getValues();
+
+  Logger.log('=== JOGADORES NA PLANILHA ===');
+  rows.forEach((row, idx) => {
+    Logger.log(`Linha ${idx}: ${JSON.stringify(row)}`);
+  });
+
+  return rows;
+}
+}
