@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="description" content="App PWA de Gestão e Balanceamento de Times de Vôlei">
+
+    <title>Vôlei Teams - Gestão de Times</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232c3e50' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🏐</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🏐</text></svg>">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-title">🏐 Vôlei Teams</div>
+            <div class="navbar-menu" id="navbar-menu">
+                <button class="nav-btn" id="nav-home" style="display: none;">Home</button>
+                <button class="nav-btn" id="nav-jogadores" style="display: none;">Jogadores</button>
+                <button class="nav-btn" id="nav-avaliacao" style="display: none;">Avaliação</button>
+                <button class="nav-btn" id="nav-gerar-times" style="display: none;">Gerar Times</button>
+                <button class="nav-btn" id="nav-historico" style="display: none;">Histórico</button>
+                <button class="nav-btn" id="nav-logout" style="display: none;">Sair</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Tela de Login -->
+        <section id="login-section" class="screen active">
+            <div class="auth-card">
+                <h1>Vôlei Teams</h1>
+                <p class="subtitle">Gestão e Balanceamento de Times</p>
+
+                <form id="login-form" class="auth-form">
+                    <input type="text" id="login-username" placeholder="Login" required autocomplete="username">
+                    <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+
+                <p class="auth-link">
+                    Não tem conta? <a href="#" id="toggle-register">Cadastre-se</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Tela de Cadastro -->
+        <section id="register-section" class="screen">
+            <div class="auth-card">
+                <h1>Novo Jogador</h1>
+
+                <form id="register-form" class="auth-form">
+                    <input type="text" id="register-name" placeholder="Nome completo" required>
+                    <input type="text" id="register-username" placeholder="Login (único)" required>
+                    <input type="password" id="register-password" placeholder="Senha" required>
+                    <input type="password" id="register-password-confirm" placeholder="Confirmar senha" required>
+
+                    <div class="form-row">
+                        <select id="register-sexo" required>
+                            <option value="">Sexo</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                        </select>
+                        <input type="number" id="register-altura" placeholder="Altura (cm)" min="140" max="220" required>
+                    </div>
+
+                    <div class="form-row">
+                        <input type="number" id="register-idade" placeholder="Idade" min="15" max="100" required>
+                        <input type="number" id="register-peso" placeholder="Peso (kg)" min="40" max="200" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+
+                <p class="auth-link">
+                    Já tem conta? <a href="#" id="toggle-login">Entrar</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Home (Dashboard) -->
+        <section id="home-section" class="screen">
+            <div class="card">
+                <h2>Bem-vindo, <span id="welcome-name"></span>!</h2>
+                <p id="user-role-info"></p>
+            </div>
+
+            <div class="card">
+                <h3>Menu Rápido</h3>
+                <div class="quick-menu">
+                    <button class="btn btn-secondary" id="quick-jogadores">Ver Jogadores</button>
+                    <button class="btn btn-secondary" id="quick-historico">Ver Histórico</button>
+                    <button class="btn btn-secondary" id="quick-avaliacao" style="display: none;">Avaliar</button>
+                    <button class="btn btn-secondary" id="quick-gerar" style="display: none;">Gerar Times</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lista de Jogadores -->
+        <section id="jogadores-section" class="screen">
+            <div class="card">
+                <h2>Jogadores</h2>
+
+                <div class="filters">
+                    <input type="text" id="search-jogadores" placeholder="Buscar por nome..." class="input-search">
+                    <select id="sort-jogadores" class="input-select">
+                        <option value="nome">Ordenar por: Nome</option>
+                        <option value="score_geral">Ordenar por: Score Geral</option>
+                        <option value="altura">Ordenar por: Altura</option>
+                    </select>
+                </div>
+
+                <div id="jogadores-list" class="jogadores-grid">
+                    <!-- Preenchido por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Avaliação (somente ADM) -->
+        <section id="avaliacao-section" class="screen">
+            <div class="card">
+                <h2>Avaliação de Jogadores</h2>
+
+                <div class="form-group">
+                    <label>Selecionar Jogo</label>
+                    <select id="select-jogo-avaliacao" class="input-select" required>
+                        <option value="">Escolha um jogo em avaliação...</option>
+                    </select>
+                </div>
+
+                <div id="avaliacao-container">
+                    <!-- Preenchido por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Gerar Times (somente ADM) -->
+        <section id="gerar-times-section" class="screen">
+            <div class="card">
+                <h2>Gerar Times</h2>
+
+                <div class="form-group">
+                    <label>Jogadores Presentes (18)</label>
+                    <div id="select-presentes" class="jogadores-checkbox-grid">
+                        <!-- Preenchido por JS -->
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="btn-gerar-times">Gerar Times</button>
+                </div>
+
+                <div id="times-resultado">
+                    <!-- Preenchido por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Histórico -->
+        <section id="historico-section" class="screen">
+            <div class="card">
+                <h2>Histórico de Montagens</h2>
+
+                <div id="historico-list" class="historico-grid">
+                    <!-- Preenchido por JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast de notificações -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modal de carregamento -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .catch(err => console.log('SW registration failed:', err));
+        }
+    </script>
+</body>
+</html>
