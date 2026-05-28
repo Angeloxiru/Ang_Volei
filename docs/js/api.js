@@ -90,5 +90,10 @@ const API = (() => {
         listarHistorico() {
             return request('listarHistorico');
         },
+
+        // Profile
+        atualizarPerfil(id_jogador, dados) {
+            return request('atualizarPerfil', { id_jogador, ...dados });
+        },
     };
 })();

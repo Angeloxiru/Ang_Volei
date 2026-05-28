@@ -63,6 +63,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         carregarHistorico();
     });
 
+    document.getElementById('nav-perfil')?.addEventListener('click', () => {
+        showScreen('perfil-section');
+        carregarPerfil();
+    });
+
     document.getElementById('nav-logout')?.addEventListener('click', () => {
         if (confirm('Tem certeza que deseja sair?')) {
             Auth.logout();
@@ -654,7 +659,7 @@ const exibirTimesGerados = (times) => {
     document.getElementById('btn-salvar-montagem')?.addEventListener('click', async () => {
         showLoading(true);
         try {
-            await API.salvarMontagem(montagemId, new Date().toISOString().split('T')[0], times);
+            await API.salvarMontagem(montagemId, new Date().toISOString().split('T')[0], times.times || []);
             showToast('Montagem salva com sucesso!', 'success');
             container.innerHTML = '<p style="text-align: center; color: #27ae60; font-weight: bold;">✓ Montagem salva!</p>';
         } catch (error) {
@@ -731,4 +736,88 @@ const exibirHistorico = (montagens) => {
 
         container.appendChild(card);
     });
+}
+
+// ===== PERFIL =====
+const carregarPerfil = () => {
+    const usuario = Auth.getUsuario();
+    if (!usuario) {
+        showToast('Erro ao carregar perfil', 'error');
+        return;
+    }
+
+    document.getElementById('perfil-nome').value = usuario.nome || '';
+    document.getElementById('perfil-login').value = usuario.login || '';
+    document.getElementById('perfil-altura').value = usuario.altura_cm || '';
+    document.getElementById('perfil-peso').value = usuario.peso_kg || '';
+    document.getElementById('perfil-idade').value = usuario.idade || '';
+    document.getElementById('perfil-senha').value = '';
+
+    document.getElementById('form-perfil').addEventListener('submit', salvarPerfil);
+    document.getElementById('btn-cancelar-perfil').addEventListener('click', () => {
+        showScreen('home-section');
+    });
+};
+
+const salvarPerfil = async (e) => {
+    e.preventDefault();
+
+    const usuario = Auth.getUsuario();
+    const senha = document.getElementById('perfil-senha').value;
+    const altura_cm = parseInt(document.getElementById('perfil-altura').value);
+    const peso_kg = parseInt(document.getElementById('perfil-peso').value);
+    const idade = parseInt(document.getElementById('perfil-idade').value);
+
+    // Validar altura
+    if (altura_cm < 140 || altura_cm > 220) {
+        showToast('Altura deve estar entre 140 e 220 cm', 'error');
+        return;
+    }
+
+    // Validar peso
+    if (peso_kg < 40 || peso_kg > 200) {
+        showToast('Peso deve estar entre 40 e 200 kg', 'error');
+        return;
+    }
+
+    // Validar idade
+    if (idade < 15 || idade > 100) {
+        showToast('Idade deve estar entre 15 e 100 anos', 'error');
+        return;
+    }
+
+    // Se senha foi preenchida, validar
+    if (senha) {
+        const senhaNum = parseInt(senha);
+        if (isNaN(senhaNum) || senhaNum < 1000 || senhaNum > 999999) {
+            showToast('Senha deve ser um número entre 1000 e 999999', 'error');
+            return;
+        }
+    }
+
+    showLoading(true);
+    try {
+        await API.atualizarPerfil(usuario.id, {
+            senha: senha ? parseInt(senha) : null,
+            altura_cm,
+            peso_kg,
+            idade,
+        });
+
+        // Atualizar dados locais
+        if (senha) {
+            usuario.password = senha;
+        }
+        usuario.altura_cm = altura_cm;
+        usuario.peso_kg = peso_kg;
+        usuario.idade = idade;
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+
+        showToast('Perfil atualizado com sucesso!', 'success');
+        showScreen('home-section');
+    } catch (error) {
+        showToast('Erro ao atualizar perfil: ' + error.message, 'error');
+    } finally {
+        showLoading(false);
+    }
 };

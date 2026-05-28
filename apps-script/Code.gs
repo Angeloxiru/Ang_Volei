@@ -56,6 +56,10 @@ function doPost(e) {
         verificarAutenticacao(token);
         response = listarHistorico();
         break;
+      case 'atualizarPerfil':
+        verificarAutenticacao(token);
+        response = atualizarPerfil(data.id_jogador, data);
+        break;
       default:
         throw new Error('Ação desconhecida: ' + action);
     }
@@ -638,6 +642,40 @@ function listarHistorico() {
   }
 
   return Object.values(montagens);
+}
+
+// ===== PERFIL =====
+function atualizarPerfil(id_jogador, dados) {
+  const jogadores = getSheet('Jogadores');
+  const rows = jogadores.getDataRange().getValues();
+
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === id_jogador) {
+      // Atualizar senha se fornecida
+      if (dados.senha) {
+        jogadores.getRange(i + 1, 4).setValue(dados.senha);
+      }
+
+      // Atualizar altura
+      if (dados.altura_cm) {
+        jogadores.getRange(i + 1, 7).setValue(dados.altura_cm);
+      }
+
+      // Atualizar idade
+      if (dados.idade) {
+        jogadores.getRange(i + 1, 8).setValue(dados.idade);
+      }
+
+      // Atualizar peso
+      if (dados.peso_kg) {
+        jogadores.getRange(i + 1, 9).setValue(dados.peso_kg);
+      }
+
+      return { id_jogador, success: true };
+    }
+  }
+
+  throw new Error('Jogador não encontrado');
 }
 
 // ===== DEBUG =====
