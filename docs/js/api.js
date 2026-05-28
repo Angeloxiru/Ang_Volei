@@ -95,5 +95,10 @@ const API = (() => {
         atualizarPerfil(id_jogador, dados) {
             return request('atualizarPerfil', { id_jogador, ...dados });
         },
+
+        // Games
+        atualizarStatusJogo(id_jogo, status) {
+            return request('atualizarStatusJogo', { id_jogo, status });
+        },
     };
 })();

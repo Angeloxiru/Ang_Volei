@@ -518,6 +518,7 @@ const fecharJogo = async (id_jogo) => {
 // ===== GERAR TIMES =====
 let todosJogadores = [];
 let jogadoresSelecionados = [];
+let jogoAtual = null;
 
 const carregarGerarTimes = async () => {
     if (!Auth.isADM()) {
@@ -587,6 +588,12 @@ document.getElementById('btn-gerar-times')?.addEventListener('click', async () =
 
     showLoading(true);
     try {
+        // Criar jogo com os 18 selecionados
+        const datahoje = new Date().toISOString().split('T')[0];
+        const jogo = await API.criarJogo(datahoje, jogadoresSelecionados);
+        jogoAtual = jogo.id_jogo;
+
+        // Depois gerar times
         const times = await API.gerarTimes(jogadoresSelecionados);
         exibirTimesGerados(times);
     } catch (error) {
@@ -660,7 +667,13 @@ const exibirTimesGerados = (times) => {
         showLoading(true);
         try {
             await API.salvarMontagem(montagemId, new Date().toISOString().split('T')[0], times.times || []);
-            showToast('Montagem salva com sucesso!', 'success');
+
+            // Atualizar status do jogo para 'avaliacao'
+            if (jogoAtual) {
+                await API.atualizarStatusJogo(jogoAtual, 'avaliacao');
+            }
+
+            showToast('Montagem salva! Jogo pronto para avaliação.', 'success');
             container.innerHTML = '<p style="text-align: center; color: #27ae60; font-weight: bold;">✓ Montagem salva!</p>';
         } catch (error) {
             showToast('Erro ao salvar montagem: ' + error.message, 'error');

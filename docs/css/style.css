@@ -56,6 +56,7 @@ body {
 .navbar-title {
     font-size: 1.5rem;
     font-weight: bold;
+    flex-shrink: 0;
 }
 
 .navbar-menu {
@@ -63,6 +64,7 @@ body {
     gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: flex-end;
+    max-height: auto;
 }
 
 .nav-btn {
@@ -74,6 +76,7 @@ body {
     border-radius: var(--radius);
     transition: background 0.3s;
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .nav-btn:hover {
@@ -739,21 +742,35 @@ textarea {
         font-size: 14px;
     }
 
+    .navbar {
+        padding: 0.5rem 0;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
     .navbar-title {
         font-size: 1rem;
+        width: 100%;
+        margin-bottom: 0.25rem;
     }
 
     .navbar-menu {
+        width: 100%;
+        gap: 0.25rem;
         flex-wrap: wrap;
-        justify-content: space-between;
+        max-height: 140px;
+        overflow-y: auto;
     }
 
     .nav-btn {
-        flex: 1;
-        min-width: 48px;
-        padding: 0.5rem;
-        font-size: 0.8rem;
-        min-height: 44px;
+        flex: 1 1 calc(50% - 0.15rem);
+        padding: 0.4rem 0.5rem;
+        font-size: 0.75rem;
+        min-height: 36px;
+        height: 36px;
     }
 
     .container {

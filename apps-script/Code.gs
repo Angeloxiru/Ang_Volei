@@ -60,6 +60,10 @@ function doPost(e) {
         verificarAutenticacao(token);
         response = atualizarPerfil(data.id_jogador, data);
         break;
+      case 'atualizarStatusJogo':
+        verificarAdministrador(token);
+        response = atualizarStatusJogo(data.id_jogo, data.status);
+        break;
       default:
         throw new Error('Ação desconhecida: ' + action);
     }
@@ -642,6 +646,21 @@ function listarHistorico() {
   }
 
   return Object.values(montagens);
+}
+
+// ===== JOGOS =====
+function atualizarStatusJogo(id_jogo, status) {
+  const jogos = getSheet('Jogos');
+  const rows = jogos.getDataRange().getValues();
+
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === id_jogo) {
+      jogos.getRange(i + 1, 4).setValue(status);
+      return { id_jogo, status };
+    }
+  }
+
+  throw new Error('Jogo não encontrado');
 }
 
 // ===== PERFIL =====
