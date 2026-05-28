@@ -1,6 +1,6 @@
 const API = (() => {
-     // Configure this with your Google Apps Script Web App URL
-    const APPS_SCRIPT_URL = localStorage.getItem('https://script.google.com/macros/s/AKfycby6TsP3GbXtMuEvjz7TBb2PmvcnUFr9mHDP5XgS3msXYsQO3sMW2vGSHGsptonu36yXAw/exec') || '';
+    // Configure this with your Google Apps Script Web App URL
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6TsP3GbXtMuEvjz7TBb2PmvcnUFr9mHDP5XgS3msXYsQO3sMW2vGSHGsptonu36yXAw/exec';
 
     const request = async (action, data = {}, method = 'POST') => {
         if (!APPS_SCRIPT_URL) {
