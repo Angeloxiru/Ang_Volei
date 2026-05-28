@@ -163,6 +163,15 @@ body {
     border-radius: var(--radius);
     font-size: 1rem;
     transition: border-color 0.3s;
+    min-height: 44px;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+    min-height: 44px;
 }
 
 .auth-form input:focus,
@@ -232,6 +241,10 @@ body {
     transition: all 0.3s;
     font-weight: 600;
     display: inline-block;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary {
@@ -722,17 +735,58 @@ body {
 }
 
 @media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
     .navbar-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
+    }
+
+    .navbar-menu {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .nav-btn {
+        flex: 1;
+        min-width: 48px;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+        min-height: 44px;
+    }
+
+    .container {
+        padding: 0.75rem;
     }
 
     .card {
         padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
     }
 
     .auth-card {
         margin: 1rem auto;
-        padding: 1.5rem;
+        padding: 1rem;
+    }
+
+    .auth-card h1 {
+        font-size: 1.5rem;
+    }
+
+    .auth-form {
+        gap: 0.75rem;
+    }
+
+    .auth-form input,
+    .auth-form select {
+        padding: 0.75rem 0.5rem;
+        font-size: 16px; /* Previne zoom em iOS */
     }
 
     .jogadores-grid {
@@ -743,7 +797,94 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .time-card {
+        padding: 1rem;
+    }
+
+    .time-card h3 {
+        font-size: 1.1rem;
+    }
+
     .avaliacao-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
+    }
+
+    .avaliacao-input input {
+        min-height: 44px;
+    }
+
+    .score-item {
+        min-width: 60px;
+    }
+
+    .jogador-card.expanded {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .jogador-card.expanded canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .btn-small {
+        min-height: 40px;
+        padding: 0.5rem 1rem;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .jogadores-checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checkbox-item {
+        padding: 0.75rem;
+        min-height: 44px;
+    }
+
+    .quick-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .toast {
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .montagem-times {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .montagem-time {
+        padding: 0.75rem;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="password"],
+    select {
+        font-size: 16px; /* Previne zoom em iOS ao focar */
+        padding: 0.75rem 0.5rem;
     }
 }
