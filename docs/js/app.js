@@ -307,7 +307,7 @@ const salvarAvaliacao = async (jogadorId, form) => {
 
         await API.avaliar(jogadorId, habilidades);
         showToast('Avaliação salva com sucesso!', 'success');
-        document.getElementById('form-avaliacao').reset();
+        document.getElementById('form-avaliar').reset();
     } catch (error) {
         showToast('Erro ao salvar avaliação: ' + error.message, 'error');
     } finally {
