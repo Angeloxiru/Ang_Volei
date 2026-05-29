@@ -46,35 +46,22 @@ const API = (() => {
         },
 
         // Auth endpoints
-        registrar(dados) {
-            return request('registrar', dados);
-        },
-
         login(login, senha) {
             return request('login', { login, senha });
         },
 
         // Player endpoints
+        registrarJogador(nome, sexo) {
+            return request('registrarJogador', { nome, sexo });
+        },
+
         listarJogadores() {
             return request('listarJogadores');
         },
 
-        // Game endpoints
-        criarJogo(data, jogadores_presentes) {
-            return request('criarJogo', { data, jogadores_presentes });
-        },
-
-        listarJogos() {
-            return request('listarJogos');
-        },
-
         // Evaluation endpoints
-        avaliar(id_jogo, id_avaliado, habilidades) {
-            return request('avaliar', { id_jogo, id_avaliado, habilidades });
-        },
-
-        fecharJogo(id_jogo) {
-            return request('fecharJogo', { id_jogo });
+        avaliar(id_jogador, habilidades) {
+            return request('avaliar', { id_jogador, habilidades });
         },
 
         // Team generation
@@ -91,14 +78,5 @@ const API = (() => {
             return request('listarHistorico');
         },
 
-        // Profile
-        atualizarPerfil(id_jogador, dados) {
-            return request('atualizarPerfil', { id_jogador, ...dados });
-        },
-
-        // Games
-        atualizarStatusJogo(id_jogo, status) {
-            return request('atualizarStatusJogo', { id_jogo, status });
-        },
     };
 })();
